@@ -58,6 +58,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## ORM Config
+
+```bash
+# run migrante
+$ npx prisma migrate dev --name "your_migrate_name"
+
+# run seeder
+$ npx prisma db seed
+```
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

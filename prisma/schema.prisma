@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Siswa {
+  id       Int       @id @default(autoincrement())
+  username String
+  password String
+  roleId   Int?
+  jawaban  Jawaban[]
+}
+
+model Guru {
+  id       Int    @id @default(autoincrement())
+  username String
+  password String
+  roleId   Int?
+}
+
+model Pelajaran {
+  id       Int       @id @default(autoincrement())
+  nama     String
+  materi   String
+  posttest String
+  jawaban  Jawaban[]
+}
+
+model Jawaban {
+  id          Int       @id @default(autoincrement())
+  pelajaran   Pelajaran @relation(fields: [pelajaranId], references: [id])
+  pelajaranId Int
+  siswa       Siswa     @relation(fields: [siswaId], references: [id])
+  siswaId     Int
+}
+
+model Role {
+  id             Int              @id @default(autoincrement())
+  name           String
+  RolePermission RolePermission[]
+}
+
+model Permission {
+  id             Int              @id @default(autoincrement())
+  name           String
+  RolePermission RolePermission[]
+}
+
+model RolePermission {
+  id           Int        @id @default(autoincrement())
+  role         Role       @relation(fields: [roleId], references: [id])
+  roleId       Int
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId Int
+}
