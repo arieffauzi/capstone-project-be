@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -13,53 +14,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Siswa {
-  id       Int       @id @default(autoincrement())
-  username String
-  password String
-  roleId   Int?
-  jawaban  Jawaban[]
+model Students {
+  id        Int       @id @default(autoincrement())
+  name      String
+  username  String
+  password  String
+  role_id   Int?
+  answers   Answers[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
-model Guru {
-  id       Int    @id @default(autoincrement())
-  username String
-  password String
-  roleId   Int?
+model Teachers {
+  id        Int      @id @default(autoincrement())
+  name      String
+  username  String
+  password  String
+  role_id   Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Pelajaran {
-  id       Int       @id @default(autoincrement())
-  nama     String
-  materi   String
-  posttest String
-  jawaban  Jawaban[]
+model Subjects {
+  id        Int       @id @default(autoincrement())
+  name      String
+  lesson    String
+  post_test String
+  answers   Answers[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
-model Jawaban {
-  id          Int       @id @default(autoincrement())
-  pelajaran   Pelajaran @relation(fields: [pelajaranId], references: [id])
-  pelajaranId Int
-  siswa       Siswa     @relation(fields: [siswaId], references: [id])
-  siswaId     Int
+model Answers {
+  id         Int      @id @default(autoincrement())
+  leson      Subjects @relation(fields: [leson_id], references: [id])
+  leson_id   Int
+  siswa      Students @relation(fields: [student_id], references: [id])
+  student_id Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Role {
   id             Int              @id @default(autoincrement())
   name           String
   RolePermission RolePermission[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 model Permission {
   id             Int              @id @default(autoincrement())
   name           String
   RolePermission RolePermission[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 model RolePermission {
-  id           Int        @id @default(autoincrement())
-  role         Role       @relation(fields: [roleId], references: [id])
-  roleId       Int
-  permission   Permission @relation(fields: [permissionId], references: [id])
-  permissionId Int
+  id            Int        @id @default(autoincrement())
+  role          Role       @relation(fields: [role_id], references: [id])
+  role_id       Int
+  permission    Permission @relation(fields: [permission_id], references: [id])
+  permission_id Int
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }

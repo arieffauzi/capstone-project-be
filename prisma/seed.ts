@@ -4,25 +4,27 @@ const prisma = new PrismaClient();
 
 async function main() {
   // create two dummy articles
-  const siswa1 = await prisma.siswa.upsert({
+  const student1 = await prisma.students.upsert({
     where: { id: 1 },
     update: {},
     create: {
+      name: 'admin',
       username: 'adminsiswa',
       password: 'asdqwe123',
     },
   });
 
-  const guru1 = await prisma.guru.upsert({
+  const teacher1 = await prisma.teachers.upsert({
     where: { id: 1 },
     update: {},
     create: {
+      name: 'admin',
       username: 'adminguru',
       password: 'asdqwe123',
     },
   });
 
-  console.log({ siswa1, guru1 });
+  console.log({ student1, teacher1 });
 }
 
 main()

@@ -1,5 +1,0 @@
--- AlterTable
-ALTER TABLE "Guru" ALTER COLUMN "roleId" DROP NOT NULL;
-
--- AlterTable
-ALTER TABLE "Siswa" ALTER COLUMN "roleId" DROP NOT NULL;
