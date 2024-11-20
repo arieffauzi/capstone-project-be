@@ -47,8 +47,8 @@ model Subjects {
 
 model Answers {
   id         Int      @id @default(autoincrement())
-  leson      Subjects @relation(fields: [leson_id], references: [id])
-  leson_id   Int
+  leson      Subjects @relation(fields: [lesson_id], references: [id])
+  lesson_id   Int
   siswa      Students @relation(fields: [student_id], references: [id])
   student_id Int
   createdAt  DateTime @default(now())
