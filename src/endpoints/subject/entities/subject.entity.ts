@@ -12,7 +12,7 @@ export class SubjectEntity implements Subjects {
   lesson: string;
 
   @ApiProperty()
-  post_test: string;
+  question: string;
 
   @ApiProperty()
   createdAt: Date;

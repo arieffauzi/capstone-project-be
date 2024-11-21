@@ -15,5 +15,5 @@ export class CreateSubjectDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  post_test!: string;
+  question!: string;
 }

@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["omitApi"]
 }
 
@@ -15,42 +15,46 @@ datasource db {
 }
 
 model Students {
-  id        Int       @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   name      String
-  username  String
+  username  String     @unique
   password  String
   role_id   Int?
-  answers   Answers[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  PostTest  PostTest[]
 }
 
 model Teachers {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   name      String
-  username  String
+  username  String     @unique
   password  String
   role_id   Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  PostTest  PostTest[]
 }
 
 model Subjects {
-  id        Int       @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   name      String
   lesson    String
-  post_test String
-  answers   Answers[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  question  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  PostTest  PostTest[]
 }
 
-model Answers {
+model PostTest {
   id         Int      @id @default(autoincrement())
-  leson      Subjects @relation(fields: [lesson_id], references: [id])
-  lesson_id   Int
+  subject    Subjects @relation(fields: [subject_id], references: [id])
+  subject_id Int
   siswa      Students @relation(fields: [student_id], references: [id])
   student_id Int
+  score      String
+  teacher    Teachers @relation(fields: [scored_by], references: [id])
+  scored_by  Int
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

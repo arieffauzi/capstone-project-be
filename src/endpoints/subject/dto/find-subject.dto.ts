@@ -3,9 +3,9 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class FindSubjectDTO {
   @ApiProperty()
-  @IsOptional()
+  // @IsOptional()
   @IsString()
-  name?: string;
+  name: string;
 
   @ApiProperty()
   @IsOptional()

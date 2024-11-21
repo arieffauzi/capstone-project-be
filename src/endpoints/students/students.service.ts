@@ -31,7 +31,7 @@ export class StudentsService {
     }
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} student`;
   }
 
