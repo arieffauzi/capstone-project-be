@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PostTestService } from './post-test.service';
 import { CreatePostTestDto } from './dto/create-post-test.dto';
 import { UpdatePostTestDto } from './dto/update-post-test.dto';
+import { FindPostTestDTO } from './dto/find-post-test.dto';
 
 @Controller('post-test')
 export class PostTestController {
@@ -12,9 +21,9 @@ export class PostTestController {
     return this.postTestService.create(createPostTestDto);
   }
 
-  @Get()
-  findAll() {
-    return this.postTestService.findAll();
+  @Post('find')
+  findAll(@Body() FindPostTestDTO: FindPostTestDTO) {
+    return this.postTestService.findAll(FindPostTestDTO);
   }
 
   @Get(':id')
@@ -23,7 +32,10 @@ export class PostTestController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostTestDto: UpdatePostTestDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePostTestDto: UpdatePostTestDto,
+  ) {
     return this.postTestService.update(+id, updatePostTestDto);
   }
 

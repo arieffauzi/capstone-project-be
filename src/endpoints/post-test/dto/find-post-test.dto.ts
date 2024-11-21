@@ -1,11 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class FindSubjectDTO {
+export class FindPostTestDTO {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  name?: string;
+  assign_to_name?: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  scored_by_name?: string;
 
   @ApiProperty()
   @IsOptional()

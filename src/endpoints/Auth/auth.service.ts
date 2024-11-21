@@ -19,7 +19,7 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<AuthEntity> {
     const { password, username } = loginDto;
 
-    const user = await this.prisma.students.findUnique({
+    const user = await this.prisma.users.findUnique({
       where: { username: username },
     });
 

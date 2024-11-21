@@ -15,16 +15,16 @@ datasource db {
 }
 
 model Users {
-  id             Int        @id @default(autoincrement())
-  name           String
-  username       String     @unique
-  password       String
-  role           Role?      @relation(fields: [role_id], references: [id])
-  role_id        Int?
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-  assignesd_test PostTest[] @relation(name: "assign_to")
-  scored_test    PostTest[] @relation(name: "scored_by")
+  id          Int        @id @default(autoincrement())
+  name        String
+  username    String     @unique
+  password    String
+  role        Role?      @relation(fields: [role_id], references: [id])
+  role_id     Int?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  assign_test PostTest[] @relation(name: "assign_to")
+  scored_test PostTest[] @relation(name: "scored_by")
 }
 
 model Subjects {
@@ -39,12 +39,14 @@ model Subjects {
 
 model PostTest {
   id           Int      @id @default(autoincrement())
+  answer       String?
+  score        Int?
   subject      Subjects @relation(fields: [subject_id], references: [id])
   subject_id   Int
   assign_to    Users?   @relation("assign_to", fields: [assign_to_id], references: [id])
   assign_to_id Int?
   scored_by    Users?   @relation("scored_by", fields: [scored_by_id], references: [id])
-  scored_by_id Int
+  scored_by_id Int?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
