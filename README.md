@@ -61,7 +61,10 @@ $ npm run test:cov
 ## ORM Config
 
 ```bash
-# run migrante
+# run migration
+$ npx prisma migrate dev
+
+# create migration
 $ npx prisma migrate dev --name "your_migrate_name"
 
 # run seeder
