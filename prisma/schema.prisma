@@ -14,26 +14,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Students {
-  id        Int        @id @default(autoincrement())
-  name      String
-  username  String     @unique
-  password  String
-  role_id   Int?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  PostTest  PostTest[]
-}
-
-model Teachers {
-  id        Int        @id @default(autoincrement())
-  name      String
-  username  String     @unique
-  password  String
-  role_id   Int?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  PostTest  PostTest[]
+model Users {
+  id             Int        @id @default(autoincrement())
+  name           String
+  username       String     @unique
+  password       String
+  role           Role?      @relation(fields: [role_id], references: [id])
+  role_id        Int?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  assignesd_test PostTest[] @relation(name: "assign_to")
+  scored_test    PostTest[] @relation(name: "scored_by")
 }
 
 model Subjects {
@@ -47,16 +38,15 @@ model Subjects {
 }
 
 model PostTest {
-  id         Int      @id @default(autoincrement())
-  subject    Subjects @relation(fields: [subject_id], references: [id])
-  subject_id Int
-  siswa      Students @relation(fields: [student_id], references: [id])
-  student_id Int
-  score      String
-  teacher    Teachers @relation(fields: [scored_by], references: [id])
-  scored_by  Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  subject      Subjects @relation(fields: [subject_id], references: [id])
+  subject_id   Int
+  assign_to    Users?   @relation("assign_to", fields: [assign_to_id], references: [id])
+  assign_to_id Int?
+  scored_by    Users?   @relation("scored_by", fields: [scored_by_id], references: [id])
+  scored_by_id Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Role {
@@ -65,6 +55,7 @@ model Role {
   RolePermission RolePermission[]
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
+  Users          Users[]
 }
 
 model Permission {

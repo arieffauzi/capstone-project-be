@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -16,7 +20,7 @@ export class SubjectService {
       const result = await this.subject.create({ data: createSubjectDto });
       return result;
     } catch (error) {
-      return error;
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -34,34 +38,51 @@ export class SubjectService {
       ]);
       return { data: subjects, total };
     } catch (error) {
-      return error;
+      throw new InternalServerErrorException(error);
     }
   }
 
   async findOne(id: number) {
     try {
-      return await this.subject.findUnique({ where: { id } });
+      const subject = await this.subject.findUnique({ where: { id } });
+
+      if (!subject) {
+        throw new NotFoundException('Subject not found');
+      }
     } catch (error) {
-      return error;
+      throw new InternalServerErrorException(error);
     }
   }
 
   async update(id: number, updateSubjectDto: UpdateSubjectDto) {
     try {
-      return await this.subject.update({
+      const subject = await this.subject.findUnique({ where: { id } });
+
+      if (!subject) {
+        throw new NotFoundException('Subject not found');
+      }
+
+      const deletedSubject = await this.subject.update({
         where: { id },
         data: updateSubjectDto,
       });
+      return deletedSubject;
     } catch (error) {
-      return error;
+      throw new InternalServerErrorException(error);
     }
   }
 
   async remove(id: number) {
     try {
+      const subject = await this.subject.findUnique({ where: { id } });
+
+      if (!subject) {
+        throw new NotFoundException('Subject not found');
+      }
+
       return await this.subject.delete({ where: { id } });
     } catch (error) {
-      return error;
+      throw new InternalServerErrorException(error);
     }
   }
 }
