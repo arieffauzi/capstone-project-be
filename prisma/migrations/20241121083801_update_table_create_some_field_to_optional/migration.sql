@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "PostTest" ALTER COLUMN "answer" DROP NOT NULL,
-ALTER COLUMN "score" DROP NOT NULL;

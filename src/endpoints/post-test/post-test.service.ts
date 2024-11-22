@@ -33,15 +33,33 @@ export class PostTestService {
       });
       return result;
     } catch (error) {
-      console.log('error', error);
       throw new InternalServerErrorException(error);
     }
   }
 
   async findAll(findPostTestDto: FindPostTestDTO) {
-    const { page, size, assign_to_name, scored_by_name } = findPostTestDto;
+    const { page, size, assign_to_name, scored_by_name, subject_name } =
+      findPostTestDto;
     const skip = ((page ?? 1) - 1) * (size ?? 10);
     const take = size ?? 10;
+
+    const test = {
+      assign_to: {
+        where: {
+          ...(assign_to_name ? { name: assign_to_name } : {}),
+        },
+      },
+      scored_by: {
+        where: {
+          ...(scored_by_name ? { name: scored_by_name } : {}),
+        },
+      },
+      subject: {
+        where: {
+          ...(subject_name ? { name: subject_name } : {}),
+        },
+      },
+    };
 
     try {
       const postTest = this.postTest.findMany({
@@ -55,14 +73,31 @@ export class PostTestService {
         include: {
           subject: true,
           assign_to: {
-            where: {
-              ...(assign_to_name ? { name: assign_to_name } : {}),
+            omit: {
+              password: true,
             },
           },
           scored_by: {
-            where: {
-              ...(scored_by_name ? { name: scored_by_name } : {}),
+            omit: {
+              password: true,
             },
+          },
+        },
+        where: {
+          assign_to: {
+            ...(assign_to_name
+              ? { name: { contains: assign_to_name, mode: 'insensitive' } }
+              : {}),
+          },
+          scored_by: {
+            ...(scored_by_name
+              ? { name: { contains: scored_by_name, mode: 'insensitive' } }
+              : {}),
+          },
+          subject: {
+            ...(subject_name
+              ? { name: { contains: subject_name, mode: 'insensitive' } }
+              : {}),
           },
         },
       });

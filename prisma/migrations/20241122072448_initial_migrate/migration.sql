@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Students" (
+CREATE TABLE "Users" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "username" TEXT NOT NULL,
@@ -8,20 +8,7 @@ CREATE TABLE "Students" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Students_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Teachers" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "role_id" INTEGER,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Teachers_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -29,7 +16,7 @@ CREATE TABLE "Subjects" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "lesson" TEXT NOT NULL,
-    "post_test" TEXT NOT NULL,
+    "question" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -37,14 +24,17 @@ CREATE TABLE "Subjects" (
 );
 
 -- CreateTable
-CREATE TABLE "Answers" (
+CREATE TABLE "PostTest" (
     "id" SERIAL NOT NULL,
-    "leson_id" INTEGER NOT NULL,
-    "student_id" INTEGER NOT NULL,
+    "answer" TEXT,
+    "score" INTEGER,
+    "subject_id" INTEGER NOT NULL,
+    "assign_to_id" INTEGER,
+    "scored_by_id" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Answers_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "PostTest_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -78,11 +68,20 @@ CREATE TABLE "RolePermission" (
     CONSTRAINT "RolePermission_pkey" PRIMARY KEY ("id")
 );
 
--- AddForeignKey
-ALTER TABLE "Answers" ADD CONSTRAINT "Answers_leson_id_fkey" FOREIGN KEY ("leson_id") REFERENCES "Subjects"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- CreateIndex
+CREATE UNIQUE INDEX "Users_username_key" ON "Users"("username");
 
 -- AddForeignKey
-ALTER TABLE "Answers" ADD CONSTRAINT "Answers_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Students"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Users" ADD CONSTRAINT "Users_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostTest" ADD CONSTRAINT "PostTest_subject_id_fkey" FOREIGN KEY ("subject_id") REFERENCES "Subjects"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostTest" ADD CONSTRAINT "PostTest_assign_to_id_fkey" FOREIGN KEY ("assign_to_id") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PostTest" ADD CONSTRAINT "PostTest_scored_by_id_fkey" FOREIGN KEY ("scored_by_id") REFERENCES "Users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "RolePermission" ADD CONSTRAINT "RolePermission_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -34,14 +34,14 @@ model Subjects {
   question  String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  PostTest  PostTest[]
+  PostTest  PostTest[] @relation(name: "subject")
 }
 
 model PostTest {
   id           Int      @id @default(autoincrement())
   answer       String?
   score        Int?
-  subject      Subjects @relation(fields: [subject_id], references: [id])
+  subject      Subjects? @relation("subject", fields: [subject_id], references: [id])
   subject_id   Int
   assign_to    Users?   @relation("assign_to", fields: [assign_to_id], references: [id])
   assign_to_id Int?

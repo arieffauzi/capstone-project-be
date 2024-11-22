@@ -14,6 +14,11 @@ export class FindPostTestDTO {
 
   @ApiProperty()
   @IsOptional()
+  @IsString()
+  subject_name?: string;
+
+  @ApiProperty()
+  @IsOptional()
   @IsNumber()
   page?: number;
 
